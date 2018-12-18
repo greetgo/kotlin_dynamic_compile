@@ -1,0 +1,66 @@
+plugins {
+  id 'java'
+  id 'org.jetbrains.kotlin.jvm' version '1.3.0'
+  id 'maven'
+  id 'idea'
+}
+
+group 'kz.pompei'
+version '0.0.1'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+  mavenCentral()
+}
+
+dependencies {
+  ext.testNgVersion = '6.14.3'
+  
+  compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+  testCompile "org.testng:testng:$testNgVersion"
+  testCompile 'org.easytesting:fest-assert-core:2.0M10'
+}
+
+compileKotlin {
+  kotlinOptions.jvmTarget = "1.8"
+}
+compileTestKotlin {
+  kotlinOptions.jvmTarget = "1.8"
+}
+
+test.useTestNG()
+
+idea.module.downloadSources = true
+idea.module.downloadJavadoc = true
+idea.module.inheritOutputDirs = false
+idea.module.outputDir = file("$buildDir/classes/main/")
+idea.module.testOutputDir = file("$buildDir/classes/test/")
+
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+[compileJava, compileTestJava]*.options*.debugOptions*.debugLevel = "source,lines,vars"
+
+sourceSets.main.java.srcDirs = ["src"]
+sourceSets.test.java.srcDirs = ["test_src"]
+sourceSets.main.resources.srcDirs = ["src_resources"]
+sourceSets.test.resources.srcDirs = ["test_resources"]
+
+sourceSets.main.resources {
+  srcDirs += sourceSets.main.java.srcDirs
+  exclude '**/*.java'
+}
+sourceSets.test.resources {
+  srcDirs += sourceSets.test.java.srcDirs
+  exclude '**/*.java'
+}
+
+jar {
+  manifest {
+    attributes 'Implementation-Title': project.name
+    attributes 'Implementation-Version': version
+    attributes 'Implementation-Vendor': "greetgo!"
+    attributes 'Created-By': System.getProperty("user.name")
+    attributes 'Created-At': new Date().format("yyyy-MM-dd/HH:mm:ss")
+  }
+}
