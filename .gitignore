@@ -332,3 +332,6 @@ gradle-app.setting
 **/build/
 
 # End of https://www.gitignore.io/api/swift,kotlin,gradle,typings,windows,intellij,intellij+all,intellij+iml
+
+### Another ###
+.attach_pid*
